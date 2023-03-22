@@ -16,3 +16,20 @@ function divide(l, r) {
   }
   return l / r;
 }
+
+function operate(op, l, r) {
+  switch (op) {
+    case '+':
+      return add(l,r);
+    case '-':
+      return subtract(l,r);
+    case '*':
+      return multiply(l,r);
+    case '/':
+      return divide(l,r);
+    default:
+      return 'Invalid Operation';
+  }
+}
+
+let left, right, op;
