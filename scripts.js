@@ -32,13 +32,50 @@ function operate(op, l, r) {
   }
 }
 
+function handleNumber(e) {
+  let result = parseInt(display.textContent);
+  result *= 10;
+  switch(e.target.id) {
+    case 'zero':
+      break;
+    case 'one':
+      result += 1;
+      break;
+    case 'two':
+      result += 2;
+      break;
+    case 'three':
+      result += 3;
+      break;
+    case 'four':
+      result += 4;
+      break;
+    case 'five':
+      result += 5;
+      break;
+    case 'six':
+      result += 6;
+      break;
+    case 'seven':
+      result += 7;
+      break;
+    case 'eight':
+      result += 8;
+      break;
+    case 'nine':
+      result += 9;
+      break;
+    default:
+      console.log('Error, non number button fired');
+  }
+  display.textContent = result;
+}
+
 let left, right, op;
 
 const display = document.querySelector('#display');
-const button_zero = document.querySelector('#zero');
+const buttons = document.querySelectorAll('.num');
 
-button_zero.addEventListener('click', () => {
-  let result = parseInt(display.textContent);
-  if (result != 0)
-  console.log(result);
+buttons.forEach((button) => {
+  button.addEventListener('click', handleNumber);
 });
