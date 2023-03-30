@@ -33,37 +33,78 @@ function operate(op, l, r) {
 }
 
 function handleNumber(e) {
-  let result = parseInt(display.textContent);
-  result *= 10;
+  let result = display.textContent;
   switch(e.target.id) {
+    case 'decimal-point':
+      result += '.';
+      break;
     case 'zero':
+      if (result !== '0') {
+        result += '0';
+      }
       break;
     case 'one':
-      result += 1;
+      if (result !== '0') {
+        result += '1';
+      } else {
+        result = '1';
+      }
       break;
     case 'two':
-      result += 2;
+      if (result !== '0') {
+        result += '2';
+      } else {
+        result = '2';
+      }
       break;
     case 'three':
-      result += 3;
+      if (result !== '0') {
+        result += '3';
+      } else {
+        result = '3';
+      }
       break;
     case 'four':
-      result += 4;
+      if (result !== '0') {
+        result += '4';
+      } else {
+        result = '4';
+      }
       break;
     case 'five':
-      result += 5;
+      if (result !== '0') {
+        result += '5';
+      } else {
+        result = '5';
+      }
       break;
     case 'six':
-      result += 6;
+      if (result !== '0') {
+        result += '6';
+      } else {
+        result = '6';
+      }
       break;
     case 'seven':
-      result += 7;
+      if (result !== '0') {
+        result += '7';
+      } else {
+        result = '7';
+      }
       break;
     case 'eight':
-      result += 8;
+      if (result !== '0') {
+        result += '8';
+      } else {
+        result = '8';
+      }
       break;
     case 'nine':
-      result += 9;
+      if (result !== '0') {
+        result += '9';
+      } else {
+        result = '9';
+      }
       break;
     default:
       console.log('Error, non number button fired');
@@ -75,7 +116,10 @@ let left, right, op;
 
 const display = document.querySelector('#display');
 const buttons = document.querySelectorAll('.num');
+const clear = document.querySelector('#ce')
 
 buttons.forEach((button) => {
   button.addEventListener('click', handleNumber);
 });
+
+clear.addEventListener('click', () => {display.textContent = '0'});
