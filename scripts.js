@@ -33,3 +33,12 @@ function operate(op, l, r) {
 }
 
 let left, right, op;
+
+const display = document.querySelector('#display');
+const button_zero = document.querySelector('#zero');
+
+button_zero.addEventListener('click', () => {
+  let result = parseInt(display.textContent);
+  if (result != 0)
+  console.log(result);
+});
