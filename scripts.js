@@ -113,13 +113,26 @@ function handleNumber(e) {
 }
 
 let left, right, op;
+let opBool = false;
 
 const display = document.querySelector('#display');
 const buttons = document.querySelectorAll('.num');
-const clear = document.querySelector('#ce')
+const clear = document.querySelector('#ce');
+const add = document.querySelector('#add');
 
 buttons.forEach((button) => {
   button.addEventListener('click', handleNumber);
 });
 
 clear.addEventListener('click', () => {display.textContent = '0'});
+
+add.addEventListener('click', () => {
+  if (!opBool) {
+    left = parseFloat(display.textContent);
+    op = '+';
+    opBool = true;
+  } else {
+    right = display.textContent;
+    display.textContent = operate(op, left, right);
+  }
+});
