@@ -36,74 +36,85 @@ function handleNumber(e) {
   let result = display.textContent;
   switch(e.target.id) {
     case 'decimal-point':
-      result += '.';
+      if (opPressed) {
+        result = '0.';
+      } else {
+        if (!hasDot) {
+          result += '.';
+          hasDot = true;
+        }
+      }
       break;
     case 'zero':
-      if (result !== '0') {
-        result += '0';
+      if (opPressed) {
+        result = '0';
+      } else {
+        if (result !== '0') {
+          result += '0';
+        }
       }
       break;
     case 'one':
-      if (result !== '0') {
-        result += '1';
-      } else {
+      if (result === '0' || opPressed) {
         result = '1';
+      } else {
+        result += '1';
       }
       break;
     case 'two':
-      if (result !== '0') {
-        result += '2';
-      } else {
+      if (result === '0' || opPressed) {
         result = '2';
+      } else {
+        result += '2';
       }
       break;
     case 'three':
-      if (result !== '0') {
-        result += '3';
-      } else {
+      if (result === '0' || opPressed) {
         result = '3';
+      } else {
+        result += '3';
       }
       break;
     case 'four':
-      if (result !== '0') {
-        result += '4';
-      } else {
+      if (result === '0' || opPressed) {
         result = '4';
+      } else {
+        result += '4';
       }
       break;
     case 'five':
-      if (result !== '0') {
-        result += '5';
-      } else {
+      if (result === '0' || opPressed) {
         result = '5';
+      } else {
+        result += '5';
       }
       break;
     case 'six':
-      if (result !== '0') {
-        result += '6';
-      } else {
+      if (result === '0' || opPressed) {
         result = '6';
+      } else {
+        result += '6';
       }
       break;
     case 'seven':
-      if (result !== '0') {
-        result += '7';
-      } else {
+      if (result === '0' || opPressed) {
         result = '7';
+      } else {
+        result += '7';
       }
       break;
     case 'eight':
-      if (result !== '0') {
-        result += '8';
-      } else {
+      if (result === '0' || opPressed) {
         result = '8';
+      } else {
+        result += '8';
       }
       break;
     case 'nine':
-      if (result !== '0') {
-        result += '9';
-      } else {
+      if (result === '0' || opPressed) {
         result = '9';
+      } else {
+        result += '9';
       }
       break;
     default:
@@ -113,26 +124,32 @@ function handleNumber(e) {
 }
 
 let left, right, op;
-let opBool = false;
+let hasDot = false;
+let opPressed = false;
 
 const display = document.querySelector('#display');
 const buttons = document.querySelectorAll('.num');
 const clear = document.querySelector('#ce');
-const add = document.querySelector('#add');
+const addButton = document.querySelector('#add');
 
 buttons.forEach((button) => {
   button.addEventListener('click', handleNumber);
 });
 
-clear.addEventListener('click', () => {display.textContent = '0'});
+clear.addEventListener('click', () => {
+  display.textContent = '0';
+  hasDot = false;
+  opPressed = false;
+});
 
-add.addEventListener('click', () => {
-  if (!opBool) {
+addButton.addEventListener('click', () => {
+  if (!opPressed) {
     left = parseFloat(display.textContent);
     op = '+';
-    opBool = true;
+    opPressed = true;
   } else {
-    right = display.textContent;
+    right = parseFloat(display.textContent);
     display.textContent = operate(op, left, right);
+    left = parseFloat(display.textContent);
   }
 });
