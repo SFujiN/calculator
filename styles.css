@@ -3,6 +3,10 @@ main {
     height: 600px;
 }
 
+button {
+    color: black;
+}
+
 #display {
     background-color: black;
     color: red;
