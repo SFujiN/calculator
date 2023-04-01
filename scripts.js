@@ -23,7 +23,7 @@ function operate(op, l, r) {
       return add(l,r);
     case '-':
       return subtract(l,r);
-    case '*':
+    case 'X':
       return multiply(l,r);
     case '/':
       return divide(l,r);
@@ -32,124 +32,97 @@ function operate(op, l, r) {
   }
 }
 
-function handleNumber(e) {
-  let result = display.textContent;
-  switch(e.target.id) {
-    case 'decimal-point':
-      if (opPressed) {
-        result = '0.';
-      } else {
-        if (!hasDot) {
-          result += '.';
-          hasDot = true;
-        }
-      }
-      break;
-    case 'zero':
-      if (opPressed) {
-        result = '0';
-      } else {
-        if (result !== '0') {
-          result += '0';
-        }
-      }
-      break;
-    case 'one':
-      if (result === '0' || opPressed) {
-        result = '1';
-      } else {
-        result += '1';
-      }
-      break;
-    case 'two':
-      if (result === '0' || opPressed) {
-        result = '2';
-      } else {
-        result += '2';
-      }
-      break;
-    case 'three':
-      if (result === '0' || opPressed) {
-        result = '3';
-      } else {
-        result += '3';
-      }
-      break;
-    case 'four':
-      if (result === '0' || opPressed) {
-        result = '4';
-      } else {
-        result += '4';
-      }
-      break;
-    case 'five':
-      if (result === '0' || opPressed) {
-        result = '5';
-      } else {
-        result += '5';
-      }
-      break;
-    case 'six':
-      if (result === '0' || opPressed) {
-        result = '6';
-      } else {
-        result += '6';
-      }
-      break;
-    case 'seven':
-      if (result === '0' || opPressed) {
-        result = '7';
-      } else {
-        result += '7';
-      }
-      break;
-    case 'eight':
-      if (result === '0' || opPressed) {
-        result = '8';
-      } else {
-        result += '8';
-      }
-      break;
-    case 'nine':
-      if (result === '0' || opPressed) {
-        result = '9';
-      } else {
-        result += '9';
-      }
-      break;
-    default:
-      console.log('Error, non number button fired');
+const numpad = {
+  dot: '.',
+  zero: '0',
+  one: '1',
+  two: '2',
+  three: '3',
+  four: '4',
+  five: '5',
+  six: '6',
+  seven: '7',
+  eight: '8',
+  nine: '9',
+};
+
+function updateDisplay(e) {
+  if (newNumber || display.textContent === '0') {
+    if (e.target.id === 'dot') {
+      display.textContent = '0.';
+    } else {
+      display.textContent = numpad[e.target.id];
+    }
+    newNumber = false;
+  } else {
+    if (e.target.id === 'dot' && display.textContent.includes('.')) {
+      return;
+    }
+    display.textContent += numpad[e.target.id];
   }
-  display.textContent = result;
 }
 
 let left, right, op;
-let hasDot = false;
-let opPressed = false;
+
+let prevButton;
+
+let newNumber = true;
+let chainOp = false;
+let opPrevClicked = false;
 
 const display = document.querySelector('#display');
-const buttons = document.querySelectorAll('.num');
+const numButtons = document.querySelectorAll('.num');
+const opButtons = document.querySelectorAll('.operation');
+const equalsButton = document.querySelector('#equals');
 const clear = document.querySelector('#ce');
-const addButton = document.querySelector('#add');
 
-buttons.forEach((button) => {
-  button.addEventListener('click', handleNumber);
+numButtons.forEach(button => {
+  button.addEventListener('click', (e) => {
+    opPrevClicked = false;
+    prevButton = e.target;
+    updateDisplay(e);
+  });
 });
 
-clear.addEventListener('click', () => {
+opButtons.forEach(button => {
+  button.addEventListener('click', (e) => {
+    if (opPrevClicked) {
+      if (prevButton.textContent === e.target.textContent) {
+        return;
+      } else {
+        op = e.target.textContent;
+      }
+    } else {
+      newNumber = true;
+      if (chainOp) {
+        right = parseFloat(display.textContent);
+        left = operate(op, left, right);
+        display.textContent = left;
+      } else {
+        left = parseFloat(display.textContent);
+      }
+      op = e.target.textContent;
+    }
+    chainOp = true;
+    opPrevClicked = true;
+    prevButton = e.target;
+  });
+});
+
+equalsButton.addEventListener('click', (e) => {
+  right = parseFloat(display.textContent);
+  result = operate(op, left, right);
+  display.textContent = result;
+  newNumber = true;
+  chainOp = false;
+  opPrevClicked = false;
+  prevButton = e.target;
+});
+
+clear.addEventListener('click', (e) => {
   display.textContent = '0';
-  hasDot = false;
-  opPressed = false;
-});
-
-addButton.addEventListener('click', () => {
-  if (!opPressed) {
-    left = parseFloat(display.textContent);
-    op = '+';
-    opPressed = true;
-  } else {
-    right = parseFloat(display.textContent);
-    display.textContent = operate(op, left, right);
-    left = parseFloat(display.textContent);
-  }
+  newNumber = true;
+  chainOp = false;
+  opPrevClicked = false;
+  prevButton = e.target;
 });
